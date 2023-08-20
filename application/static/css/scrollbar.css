@@ -1,0 +1,18 @@
+*::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+*::-webkit-scrollbar:vertical {
+    width: 8px;
+}
+*::-webkit-scrollbar:horizontal {
+    height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 1px solid rgb(134 134 134); /* should match background, can't be transparent */
+    background-color: rgb(43,48,53);
+}
+*::-webkit-scrollbar-track { 
+    background-color: rgb(33,37,41); 
+    border-radius: 8px; 
+}
