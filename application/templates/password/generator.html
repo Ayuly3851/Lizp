@@ -1,3 +1,77 @@
 {% extends 'base.html' %}
-
 {% block title %}Password Generator{% endblock %}
+{% block content %}
+	<main class="table-manager" style="padding-top: 2%; padding-bottom: 3%; padding-left: 5%; padding-right: 5%;">
+		<div class="tab-content" id="nav-tabContent" style="padding-top: 2%;">
+			<div class="row " style="width:auto">
+				<div class="col-md-6" style="width:100%">
+					<div class="card tab-pane fade show active" id="nav-password-manager" role="tabpanel" aria-labelledby="nav-password-manager-tab" tabindex="0">
+						<div class="card-header">Password Generator</div>
+						<nav class="navbar bg-body-tertiary">
+							<div class="container-fluid">
+								<div class="d-flex" style="width:100%">
+									<input class="form-control ms-2 me-2" id="password-output" type="input" placeholder="Password">
+									<button class="btn btn-outline-success" onclick="change_to_pass('password-output')" >Generate</button>
+								</div>
+							</div>
+						</nav>
+						<div class="card-body overflow-auto" style="width:100%; max-height:300px;">
+							<div class="container">
+								<div class="row row-cols-2">
+									<div class="col">
+										<div class="input-group input-group-sm" style="max-height:50px">
+											<span class="input-group-text">Lenght</span>
+											<input type="text" class="form-control" value="20" type="number" id="lenght-password" min="8" max="50" required>
+										</div>
+									</div>
+									<div class="col">
+										<div class="input-group input-group-sm mb-3" style="max-height:50px">
+											<span class="input-group-text">Symbols</span>
+											<input type="text" class="form-control" id="symbols-password" value="!@#$%^&*()+">
+										</div>
+									</div>
+									<div class="form-check col">
+										<input class="form-check-input" type="checkbox" value="" id="lowercase-password" checked>
+										<label class="form-check-label" for="lowercase-password">
+											Lowercase (a-z)
+										</label>
+									</div>
+									<div class="form-check col">
+										<input class="form-check-input" type="checkbox" value="" id="uppercase-password" checked>
+										<label class="form-check-label" for="uppercase-password">
+											Uppercase (A-Z)
+										</label>
+									</div>
+									<div class="form-check col">
+										<input class="form-check-input" type="checkbox" value="" id="digits-password" checked>
+										<label class="form-check-label" for="digits-password">
+											Digits (0-9)
+										</label>
+									</div>
+									<div class="form-check col">
+										<input class="form-check-input" type="checkbox" value="" id="symbol-password" checked>
+										<label class="form-check-label" for="symbol-password">
+											Symbol
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<nav class="navbar bg-body-tertiary">
+							<div class="container-fluid">
+								<div class="d-flex" role="save" style="width:100%">
+									<div></div>
+									<div class="ms-auto">
+										<button class="btn btn-primary" onclick="copy_text('password-output')">
+										<i class="bi bi-clipboard px-2"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+{% endblock %}

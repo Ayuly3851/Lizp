@@ -4,12 +4,14 @@ from .modules.rsa_key import save_key
 from .models import Password, User
 from sqlalchemy import or_, and_
 from . import db
+from .modules.password import Password as Pwd
 import base64
 import rsa
+import os
 
 password = Blueprint(name="password", import_name=__name__)
 
-@password.route('/set-key', methods=["POST"])
+@password.route('/create-key', methods=["POST"])
 @login_required
 def set_key():
 	try:
@@ -23,14 +25,21 @@ def set_key():
 		save_key(privateKey, current_user.username)
 		flash('Created keys.', category='success')
 	except:
-		flash('Failed to create keys!', category='error')
-		return redirect(url_for('views.index'))
+		flash(f'Failed to create keys!', category='error')
+		
 	return redirect(url_for('password.manager'))
 
 @password.route('/manager', methods=["GET", "POST"])
 @login_required
 def manager():
 	if current_user.public_key != None:
+		if not os.path.exists(f'keys/{current_user.username}.key'):
+			User.query.filter_by(email=current_user.email).update(dict(
+                public_key=None
+            ))
+			db.session.commit()
+			return redirect(url_for('password.manager'))
+
 		priv_key = rsa.PrivateKey.load_pkcs1(open(f'keys/{current_user.username}.key', 'rb').read())
 		passwords = []
 		for password in current_user.passwords:
@@ -123,10 +132,7 @@ def manager_search():
 	priv_key = rsa.PrivateKey.load_pkcs1(open(f'keys/{current_user.username}.key', 'rb').read())
 	pub_key = rsa.PublicKey.load_pkcs1(current_user.public_key)
 
-	if search_option == 0:
-		data = Password.query.filter(and_(Password.id == int(search_value), Password.user_id == current_user.id)).first()
-
-	elif search_option == 1:
+	if search_option == 1:
 		data = Password.query.filter(and_(Password.url.like(search_value + '%'), Password.user_id == current_user.id)).all()
 
 	elif search_option == 2:
@@ -138,11 +144,13 @@ def manager_search():
 	elif search_option == 4:
 		data = Password.query.filter(and_(or_(Password.url.like(search_value + '%'), Password.username.like(search_value + '%'), Password.email.like(search_value + '%')), Password.user_id == current_user.id)).all()
 
+	pass_id = 0
 	if isinstance(data, list):
+		pass_id += 1
 		for password in data:
-			print(password.password)
+			# print(password.password)
 			dec_password = decrypt(password.password, priv_key)
-			passwords.append({"id":password.id,
+			passwords.append({"id":pass_id,
 								"url":password.url,
 								"username": password.username,
 								"email": password.email,
@@ -177,12 +185,30 @@ def delete(id):
 	else:
 		return redirect("views.index")
 
-@password.route('/generator', methods=["GET", "POST"])
+@password.route('/generator', methods=["GET"])
 @login_required
 def generator():
-	if request.method == "POST":
-		pass
 	return render_template('password/generator.html', user=current_user)
+
+@password.route('/generate_password', methods=["POST"])
+@login_required
+def generate_password():
+	pwd = Pwd()
+
+	settings = request.json
+
+	try:
+		password = pwd.generate_password(length = int(settings['lenght']), 
+										have_ascii_lowercase = settings['lowercase'],
+										have_ascii_uppercase = settings['uppercase'],
+										have_digits = settings['digits'],
+										have_punctuation = settings['symbol'],
+										punctuation_characters = settings['symbols'])
+	except ValueError:
+		flash('Length must contain only number', category='error')
+		return {'password': ''}
+
+	return {'password': password}
 
 @password.route('/checker', methods=["GET", "POST"])
 @login_required

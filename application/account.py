@@ -5,3 +5,8 @@ from . import db
 from werkzeug.security import check_password_hash, generate_password_hash
 
 account = Blueprint(name="account", import_name=__name__)
+
+@account.route('/view')
+@login_required
+def view():
+	return render_template('account.html', user=current_user)
