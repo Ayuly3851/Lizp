@@ -1,0 +1,1 @@
+powershell.exe  -C ".\venv\Scripts\activate ; python .\app.py"

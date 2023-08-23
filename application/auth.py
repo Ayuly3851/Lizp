@@ -23,7 +23,7 @@ def login():
 				return redirect(url_for("password.manager"))
 
 			else:
-				flash(f"Incorrect password for {user.email}", category="error")
+				flash(f"Incorrect email or password for {user.email}", category="error")
 				return redirect(url_for("auth.login"))
 
 		else:

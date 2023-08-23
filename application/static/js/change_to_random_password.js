@@ -31,7 +31,6 @@ function get_password() {
                 return obj.body.password
             })
         );
-
     return res
 }
 
@@ -46,10 +45,8 @@ function change_to_pass(id) {
 function copy_text(id){
 	var copyText = document.getElementById(id);
 
-  // Select the text field
   copyText.select();
-  copyText.setSelectionRange(0, 99999); // For mobile devices
+  copyText.setSelectionRange(0, 99999);
 
-   // Copy the text inside the text field
   navigator.clipboard.writeText(copyText.value);
 }

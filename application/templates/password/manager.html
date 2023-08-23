@@ -2,12 +2,6 @@
 {% block title %}Password Manager{% endblock %}
 {% block content %}
 	{% if user.public_key != None %}
-		<script type="text/javascript">
-			$('#pb').submit(function(){
-
-			    console.log(1)
-			});
-		</script>
 		<main class="table-manager" style="padding-top: 2%; padding-bottom: 3%; padding-left: 5%; padding-right: 5%;">
 			<div class="tab-content" id="nav-tabContent" style="padding-top: 2%;">
 				<div class="row " style="width:auto">
@@ -16,7 +10,7 @@
 							<div class="card-header">Password Manager</div>
 							<nav class="navbar bg-body-tertiary">
 								<div class="container-fluid">
-									<form action="manager/search" method="post" class="d-flex" role="search" style="width:100%">
+									<form action="/password/manager/search" method="post" class="d-flex" role="search" style="width:100%">
 										<select class="form-select" name='search-option' aria-label="" style="width:auto">
 											<option value="1">Website</option>
 											<option value="2">Username</option>

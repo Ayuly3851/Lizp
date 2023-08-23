@@ -144,13 +144,10 @@ def manager_search():
 	elif search_option == 4:
 		data = Password.query.filter(and_(or_(Password.url.like(search_value + '%'), Password.username.like(search_value + '%'), Password.email.like(search_value + '%')), Password.user_id == current_user.id)).all()
 
-	pass_id = 0
 	if isinstance(data, list):
-		pass_id += 1
 		for password in data:
-			# print(password.password)
 			dec_password = decrypt(password.password, priv_key)
-			passwords.append({"id":pass_id,
+			passwords.append({"id":password.id,
 								"url":password.url,
 								"username": password.username,
 								"email": password.email,
